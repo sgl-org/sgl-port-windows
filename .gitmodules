@@ -1,0 +1,7 @@
+[submodule "sgl"]
+	path = sgl
+	url = https://github.com/sgl-org/sgl.git
+
+[submodule "lite-manager"]
+	path = lite-manager
+	url = https://github.com/sgl-org/lite-manager.git
