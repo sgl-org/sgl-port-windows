@@ -178,7 +178,7 @@ void keyboard_callback(sgl_event_t *event)
     SGL_LOG_INFO("keyboard clicked ascii = %d", sgl_obj_get_style(event->obj, SGL_STYLE_KEYBOARD_OPCODE));
 }
 
-uint8_t buf[20] = {0};
+char buf[20] = {0};
 
 void slider_callback(sgl_event_t *event)
 {
