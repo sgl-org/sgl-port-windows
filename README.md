@@ -6,5 +6,5 @@ A windows demo for SGL
 ### 3. git submodule init
 ### 4. git submodule update --remote
 ### 5. cd demo
-### 6. make config
+### 6. make -j8
 ### 7. make run
