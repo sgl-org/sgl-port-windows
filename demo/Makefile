@@ -1,22 +1,5 @@
-LM = ../lite-manager/source/lm.exe
-
-
-TARGET    := sgl_demo
+TARGET    := sgl_simulator
 BUILD_DIR := build
-
-
-# include configuration file for makefile
-.PHONY: check_lmmk
-ifneq ($(wildcard .lm.mk),)
--include .lm.mk
-else
-check_lmmk:
-	@echo "Please run 'make config'"
-endif
-
-
-# disable print directory for make
-MAKEFLAGS += --no-print-directory
 
 
 # toolchain
@@ -29,23 +12,63 @@ OD = $(CC_PREFIX)objdump
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
 
+CPATH     := -Isdl/include/SDL2      \
+			 -I../sgl/source         \
+			 -I../sgl/source/include
 
-CFLAGS    := $(MC_FLAG) $(C_PATH) $(C_DEFINE) $(C_FLAG) $(CPP_FLAG)
-ASFLAGS   := $(MC_FLAG) $(C_PATH) $(C_DEFINE) $(AS_FLAG) 
-LDFLAGS   := $(MC_FLAG) $(LD_FLAG) $(LIB_PATH) $(LIB_NAME) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
+CFLAGS    := $(CPATH) -O2 -Wl,-Bstatic -ffunction-sections -fdata-sections -nostdlib -ffreestanding -Wunused-function -Wall -Wextra -Werror -std=c99  -g
+LDFLAGS   := -lmingw32 -lSDL2main -lSDL2.dll -Lsdl/lib -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
 
 
-.PHONY: all
-all: $(BUILD_DIR)/$(TARGET).exe elf_info
+SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  \
+			../sgl/source/core/sgl_core.c    \
+			../sgl/source/core/sgl_log.c     \
+			../sgl/source/core/sgl_math.c    \
+			../sgl/source/core/sgl_event.c   \
+			../sgl/source/core/sgl_anim.c    \
+			../sgl/source/mm/lwmem/lwmem.c   \
+			../sgl/source/mm/lwmem/sgl_mm.c  \
+			../sgl/source/draw/sgl_draw_line.c  \
+			../sgl/source/draw/sgl_draw_rect.c  \
+			../sgl/source/draw/sgl_draw_bar.c    \
+			../sgl/source/draw/sgl_draw_circle.c  \
+			../sgl/source/draw/sgl_draw_arc.c     \
+			../sgl/source/draw/sgl_draw_text.c \
+            ../sgl/source/draw/sgl_draw_ring.c  \
+			../sgl/source/draw/sgl_draw_icon.c  \
+			../sgl/source/widgets/line/sgl_line.c  \
+			../sgl/source/widgets/rectangle/sgl_rectangle.c  \
+			../sgl/source/widgets/circle/sgl_circle.c  \
+			../sgl/source/widgets/ring/sgl_ring.c  \
+			../sgl/source/widgets/arc/sgl_arc.c   \
+			../sgl/source/widgets/button/sgl_button.c   \
+			../sgl/source/widgets/slider/sgl_slider.c   \
+			../sgl/source/widgets/label/sgl_label.c   \
+			../sgl/source/widgets/switch/sgl_switch.c   \
+			../sgl/source/widgets/msgbox/sgl_msgbox.c   \
+			../sgl/source/widgets/textline/sgl_textline.c  \
+			../sgl/source/widgets/textbox/sgl_textbox.c    \
+			../sgl/source/widgets/checkbox/sgl_checkbox.c   \
+			../sgl/source/widgets/listview/sgl_listview.c   \
+			../sgl/source/widgets/icon/sgl_icon.c     \
+			../sgl/source/widgets/numberkbd/sgl_numberkbd.c  \
+			../sgl/source/widgets/keyboard/sgl_keyboard.c   \
+			../sgl/source/fonts/sgl_ascii_song23.c         \
+			../sgl/source/fonts/sgl_ascii_consolas23.c     \
+			../sgl/source/fonts/sgl_ascii_consolas14.c     \
+			../sgl/source/fonts/sgl_ascii_kai33.c
+
+.PHONY: config all
+all: config $(BUILD_DIR)/$(TARGET).exe elf_info
+
+config:
+	@echo "copy sgl_config.h..."
+	@cp sgl_config.h ../sgl/source/sgl_config.h
 
 
 # list of c and c++ program objects
-OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(C_SOURCE)))))
-vpath %.c $(sort $(dir $(C_SOURCE)))
-vpath %.cpp $(sort $(dir $(C_SOURCE)))
-# list of ASM program objects
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCE:.S=.o)))
-vpath %.S $(sort $(dir $(ASM_SOURCE)))
+OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(patsubst %.c, %.o, $(SOURCE))))
+vpath %.c $(sort $(dir $(SOURCE)))
 
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
@@ -53,17 +76,6 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	@$(CC) -c $(CFLAGS) -MMD -MP \
 		-MF  $(BUILD_DIR)/$(notdir $(<:.c=.d)) \
 		-Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
-
-$(BUILD_DIR)/%.o: %.cpp Makefile | $(BUILD_DIR)
-	@echo "CC   $<"
-	@$(CC) -c $(CFLAGS) -MMD -MP \
-		-MF  $(BUILD_DIR)/$(notdir $(<:.cpp=.d)) \
-		-Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.cpp=.lst)) $< -o $@
-
-$(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
-	@echo "AS   $<"
-	@$(AS) -c $(ASFLAGS) -MMD -MP  \
-		-MF $(BUILD_DIR)/$(notdir $(<:.S=.d)) $< -o $@
 
 
 $(BUILD_DIR)/$(TARGET).exe: $(OBJECTS) Makefile
@@ -86,24 +98,14 @@ $(BUILD_DIR):
 
 
 # Pseudo command
-.PHONY: config clean run
+.PHONY: clean run
 
 
 run: $(BUILD_DIR)/$(TARGET).exe
-	@$(LM) --cp sdl/bin/SDL2.dll $(BUILD_DIR)/SDL2.dll
+	@cp sdl/bin/SDL2.dll $(BUILD_DIR)/SDL2.dll
 	@$(BUILD_DIR)/$(TARGET).exe
 
 
-# Check if the proj.cfg file exists
-config: $(LM) .config
-	@$(LM) --projcfg .config --lmcfg lm.cfg --out ../sgl/source/sgl_config.h --mk .lm.mk --mem 50
-	@$(MAKE) clean
-
 # clean command, delete build directory
 clean:
-	@$(LM) --rm $(BUILD_DIR)
-
-
-# lite-manager tool build
-$(LM):
-	@$(MAKE) -C $(dir $(LM)) -j4
+	rm -rf $(BUILD_DIR)
