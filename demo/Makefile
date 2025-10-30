@@ -1,6 +1,17 @@
 TARGET    := sgl_simulator
 BUILD_DIR := build
 
+ENV_TYPE := $(shell echo $$0)
+ifeq ($(ENV_TYPE),/usr/bin/sh)
+    CONFIG = cp sgl_config.h ../sgl/source/sgl_config.h
+    SDL_COPY = cp  sdl/bin/SDL2.dll $(BUILD_DIR)/SDL2.dll
+    CLEAN = rm -rf $(BUILD_DIR)
+else
+    CONFIG = copy /Y sgl_config.h ..\sgl\source\sgl_config.h
+    SDL_COPY = copy /Y sdl\bin\SDL2.dll $(BUILD_DIR)\SDL2.dll
+    CLEAN = rmdir /S /Q $(BUILD_DIR)
+endif
+
 
 # toolchain
 CC_PREFIX ?= 
@@ -58,12 +69,13 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  \
 			../sgl/source/fonts/sgl_ascii_consolas14.c     \
 			../sgl/source/fonts/sgl_ascii_kai33.c
 
+
 .PHONY: config all
 all: config $(BUILD_DIR)/$(TARGET).exe elf_info
 
 config:
 	@echo "copy sgl_config.h..."
-	@cp sgl_config.h ../sgl/source/sgl_config.h
+	@$(CONFIG)
 
 
 # list of c and c++ program objects
@@ -102,10 +114,10 @@ $(BUILD_DIR):
 
 
 run: $(BUILD_DIR)/$(TARGET).exe
-	@cp sdl/bin/SDL2.dll $(BUILD_DIR)/SDL2.dll
+	@$(SDL_COPY)
 	@$(BUILD_DIR)/$(TARGET).exe
 
 
 # clean command, delete build directory
 clean:
-	rm -rf $(BUILD_DIR)
+	@$(CLEAN)
