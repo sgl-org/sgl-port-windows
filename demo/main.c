@@ -24,14 +24,6 @@ const sgl_pixmap_t keyboard_pixmap = {
     .bitmap = gImage_btn,
 };
 
-extern const unsigned char page1_bitmap[425600];
-const sgl_pixmap_t page1_pixmap = {
-    .width = 266,
-    .height = 400,
-    .bitmap = page1_bitmap,
-};
-
-
 extern const unsigned char gImage_test[1536000];
 const sgl_pixmap_t test_pixmap = {
     .width = 800,
@@ -157,7 +149,6 @@ int main(int argc, char *argv[])
         sgl_rect_set_border_width(test_page[i], 0);
         sgl_rect_set_color(test_page[i], sgl_rgb(sgl_rand() % 255, sgl_rand() % 255, sgl_rand() % 255));
         sgl_rect_set_alpha(test_page[i], 200);
-        sgl_rect_set_pixmap(test_page[i], &page1_pixmap);
         sgl_obj_set_clickable(test_page[i]);
         sgl_obj_set_event_cb(test_page[i], test_click_cb, 0);
 

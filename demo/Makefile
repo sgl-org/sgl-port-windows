@@ -31,7 +31,7 @@ CFLAGS    := $(CPATH) -O2 -Wl,-Bstatic -ffunction-sections -fdata-sections -nost
 LDFLAGS   := -lmingw32 -lSDL2main -lSDL2.dll -Lsdl/lib -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
 
 
-SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  page1.c \
+SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
 			../sgl/source/core/sgl_core.c    \
 			../sgl/source/core/sgl_log.c     \
 			../sgl/source/core/sgl_math.c    \
