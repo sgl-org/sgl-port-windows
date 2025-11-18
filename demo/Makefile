@@ -31,7 +31,7 @@ CFLAGS    := $(CPATH) -O2 -Wl,-Bstatic -ffunction-sections -fdata-sections -nost
 LDFLAGS   := -lmingw32 -lSDL2main -lSDL2.dll -Lsdl/lib -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
 
 
-SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  \
+SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  page1.c \
 			../sgl/source/core/sgl_core.c    \
 			../sgl/source/core/sgl_log.c     \
 			../sgl/source/core/sgl_math.c    \
@@ -41,7 +41,6 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  \
 			../sgl/source/mm/lwmem/sgl_mm.c  \
 			../sgl/source/draw/sgl_draw_line.c  \
 			../sgl/source/draw/sgl_draw_rect.c  \
-			../sgl/source/draw/sgl_draw_bar.c    \
 			../sgl/source/draw/sgl_draw_circle.c  \
 			../sgl/source/draw/sgl_draw_arc.c     \
 			../sgl/source/draw/sgl_draw_text.c \
@@ -60,12 +59,14 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  \
 			../sgl/source/widgets/textline/sgl_textline.c  \
 			../sgl/source/widgets/textbox/sgl_textbox.c    \
 			../sgl/source/widgets/checkbox/sgl_checkbox.c   \
-			../sgl/source/widgets/listview/sgl_listview.c   \
 			../sgl/source/widgets/icon/sgl_icon.c     \
 			../sgl/source/widgets/numberkbd/sgl_numberkbd.c  \
 			../sgl/source/widgets/keyboard/sgl_keyboard.c   \
+			../sgl/source/widgets/2dball/sgl_2dball.c      \
+			../sgl/source/widgets/led/sgl_led.c      \
 			../sgl/source/fonts/sgl_ascii_song23.c         \
 			../sgl/source/fonts/sgl_ascii_consolas23.c     \
+			../sgl/source/fonts/sgl_ascii_consolas24.c     \
 			../sgl/source/fonts/sgl_ascii_consolas14.c     \
 			../sgl/source/fonts/sgl_ascii_kai33.c
 

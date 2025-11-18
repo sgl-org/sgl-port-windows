@@ -30,9 +30,9 @@
 #include <sgl.h>
 
 
-#define  CONFIG_SGL_PANEL_WIDTH         800
-#define  CONFIG_SGL_PANEL_HEIGHT        480
-#define  CONFIG_SGL_PANEL_BUFFER_LINE   40
+#define  CONFIG_SGL_PANEL_WIDTH         240
+#define  CONFIG_SGL_PANEL_HEIGHT        400
+#define  CONFIG_SGL_PANEL_BUFFER_LINE   100
 
 
 static SDL_Renderer * m_renderer = NULL;
@@ -104,7 +104,7 @@ static uint32_t system_tick(uint32_t interval, void *param)
 static uint32_t anim_systick(uint32_t interval, void *param)
 {
     SGL_UNUSED(param);
-    sgl_anim_tick_inc(1);
+    sgl_tick_inc(1);
     return interval;
 }
 
@@ -162,7 +162,8 @@ static void panel_flush_area(int16_t x, int16_t y, int16_t w, int16_t h, sgl_col
 }
 
 
-static sgl_color_t panel_buffer[CONFIG_SGL_PANEL_WIDTH * CONFIG_SGL_PANEL_BUFFER_LINE] = {0};
+static sgl_color_t panel_buffer0[CONFIG_SGL_PANEL_WIDTH * CONFIG_SGL_PANEL_BUFFER_LINE] = {0};
+static sgl_color_t panel_buffer1[CONFIG_SGL_PANEL_WIDTH * CONFIG_SGL_PANEL_BUFFER_LINE] = {0};
 
 
 void log_stdout(const char *str)
@@ -182,8 +183,9 @@ sgl_port_sdl2_t* sgl_port_sdl2_init(void)
         .xres_virtual = CONFIG_SGL_PANEL_WIDTH,
         .yres_virtual = CONFIG_SGL_PANEL_HEIGHT,
         .flush_area = panel_flush_area,
-        .framebuffer = panel_buffer,
-        .framebuffer_size = SGL_ARRAY_SIZE(panel_buffer),
+        .buffer[0] = panel_buffer0,
+        .buffer[1] = panel_buffer1,
+        .buffer_size = SGL_ARRAY_SIZE(panel_buffer0),
     };
 
     sgl_device_log_register(log_stdout);
