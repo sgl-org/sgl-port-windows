@@ -44,7 +44,7 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
 			../sgl/source/draw/sgl_draw_circle.c  \
 			../sgl/source/draw/sgl_draw_arc.c     \
 			../sgl/source/draw/sgl_draw_text.c \
-            ../sgl/source/draw/sgl_draw_ring.c  \
+                        ../sgl/source/draw/sgl_draw_ring.c  \
 			../sgl/source/draw/sgl_draw_icon.c  \
 			../sgl/source/widgets/line/sgl_line.c  \
 			../sgl/source/widgets/rectangle/sgl_rectangle.c  \
@@ -67,8 +67,7 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
 			../sgl/source/fonts/sgl_ascii_song23.c         \
 			../sgl/source/fonts/sgl_ascii_consolas23.c     \
 			../sgl/source/fonts/sgl_ascii_consolas24.c     \
-			../sgl/source/fonts/sgl_ascii_consolas14.c     \
-			../sgl/source/fonts/sgl_ascii_kai33.c
+			../sgl/source/fonts/sgl_ascii_consolas14.c     
 
 
 .PHONY: config all

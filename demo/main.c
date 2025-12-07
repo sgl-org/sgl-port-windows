@@ -100,11 +100,7 @@ void test_click_cb(sgl_event_t *event)
             }
         }
     }
-}
 
-
-void page_cb(sgl_event_t *event)
-{
     int diff = sgl_obj_get_pos_y(test_page[0]) % SGL_SCREEN_HEIGHT;
     SGL_LOG_INFO("Clicked %d", diff);
     if (event->type == SGL_EVENT_MOVE_UP) {
@@ -136,8 +132,6 @@ int main(int argc, char *argv[])
     }
 
     sgl_page_set_pixmap(sgl_screen_act(), &test_pixmap);
-    sgl_obj_set_event_cb(sgl_screen_act(), page_cb, 0);
-    sgl_obj_set_movable(sgl_screen_act());
 
     int pos_y = 0;
 
