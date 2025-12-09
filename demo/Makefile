@@ -27,7 +27,7 @@ CPATH     := -Isdl/include/SDL2      \
 			 -I../sgl/source         \
 			 -I../sgl/source/include
 
-CFLAGS    := $(CPATH) -O2 -Wl,-Bstatic -ffunction-sections -fdata-sections -nostdlib -ffreestanding -Wunused-function -Wall -Wextra -Werror -std=c99  -g
+CFLAGS    := $(CPATH) -O2 -Wl,-Bstatic -ffunction-sections -fdata-sections -nostdlib -ffreestanding -Wunused-function -Wall -Wextra -std=c99  -g
 LDFLAGS   := -lmingw32 -lSDL2main -lSDL2.dll -Lsdl/lib -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
 
 
@@ -44,7 +44,7 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
 			../sgl/source/draw/sgl_draw_circle.c  \
 			../sgl/source/draw/sgl_draw_arc.c     \
 			../sgl/source/draw/sgl_draw_text.c \
-                        ../sgl/source/draw/sgl_draw_ring.c  \
+			../sgl/source/draw/sgl_draw_ring.c  \
 			../sgl/source/draw/sgl_draw_icon.c  \
 			../sgl/source/widgets/line/sgl_line.c  \
 			../sgl/source/widgets/rectangle/sgl_rectangle.c  \

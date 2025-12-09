@@ -41,7 +41,7 @@ typedef struct sgl_port_sdl2 {
     SDL_Window    *m_window;
     SDL_TimerID   systick;
     SDL_TimerID   anim_systick;
-    size_t        frame_count;
+    uint32_t      frame_count;
 } sgl_port_sdl2_t;
 
 
@@ -94,8 +94,8 @@ static uint32_t system_tick(uint32_t interval, void *param)
     sgl_mm_monitor_t mm = sgl_mm_get_monitor();
     sgl_port_sdl2_t *sdl2_dev = (sgl_port_sdl2_t*)param;
     SGL_UNUSED(mm);
-    printf("SGL SDL2 Frame = %lld\n", sdl2_dev->frame_count);
-    printf("Memory: total: %lld used: %lld, free = %lld\n", mm.total_size, mm.used_size, mm.free_size);
+    printf("SGL SDL2 Frame = %d\n", sdl2_dev->frame_count);
+    printf("Memory: total: %d used: %d, free = %d\n", mm.total_size, mm.used_size, mm.free_size);
     sdl2_dev->frame_count = 0;
 	return interval;
 }
