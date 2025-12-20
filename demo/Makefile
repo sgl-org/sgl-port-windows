@@ -37,6 +37,7 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
 			../sgl/source/core/sgl_math.c    \
 			../sgl/source/core/sgl_event.c   \
 			../sgl/source/core/sgl_anim.c    \
+			../sgl/source/core/sgl_snprintf.c \
 			../sgl/source/mm/lwmem/lwmem.c   \
 			../sgl/source/mm/lwmem/sgl_mm.c  \
 			../sgl/source/draw/sgl_draw_line.c  \
