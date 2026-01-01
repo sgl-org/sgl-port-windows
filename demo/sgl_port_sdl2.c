@@ -147,7 +147,7 @@ static int mouse_event_interrupt(void *userdata, SDL_Event *event)
 }
 
 
-static void panel_flush_area(int16_t x1, int16_t y1, int16_t x2, int16_t y2, sgl_color_t *src)
+static bool panel_flush_area(int16_t x1, int16_t y1, int16_t x2, int16_t y2, sgl_color_t *src)
 {
     sgl_color_t *dest = sdl2_frame_buffer;
     int16_t w = x2 - x1 + 1;
@@ -161,6 +161,7 @@ static void panel_flush_area(int16_t x1, int16_t y1, int16_t x2, int16_t y2, sgl
     }
 
     flush_window(m_renderer);
+    return true;
 }
 
 
