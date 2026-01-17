@@ -45,15 +45,16 @@ typedef struct sgl_port_sdl2 {
 } sgl_port_sdl2_t;
 
 
-#if (CONFIG_SGL_PANEL_PIXEL_DEPTH == 32)
+#if (CONFIG_SGL_FBDEV_PIXEL_DEPTH == 32)
 #define  SDL_PIXEL_FORMAT       SDL_PIXELFORMAT_ARGB8888
-#elif (CONFIG_SGL_PANEL_PIXEL_DEPTH == 24)
+#elif (CONFIG_SGL_FBDEV_PIXEL_DEPTH == 24)
 #define  SDL_PIXEL_FORMAT       SDL_PIXELFORMAT_BGR24
-#elif (CONFIG_SGL_PANEL_PIXEL_DEPTH == 16)
+#elif (CONFIG_SGL_FBDEV_PIXEL_DEPTH == 16)
 #define  SDL_PIXEL_FORMAT       SDL_PIXELFORMAT_RGB565
-#elif (CONFIG_SGL_PANEL_PIXEL_DEPTH == 8)
+#elif (CONFIG_SGL_FBDEV_PIXEL_DEPTH == 8)
 #define  SDL_PIXEL_FORMAT       SDL_PIXELFORMAT_RGB332
 #endif
+
 
 
 sgl_color_t sdl2_frame_buffer[CONFIG_SGL_PANEL_WIDTH * CONFIG_SGL_PANEL_HEIGHT] = {0};
@@ -147,12 +148,12 @@ static int mouse_event_interrupt(void *userdata, SDL_Event *event)
 }
 
 
-static bool panel_flush_area(int16_t x1, int16_t y1, int16_t x2, int16_t y2, sgl_color_t *src)
+static void panel_flush_area(sgl_area_t *area, sgl_color_t *src)
 {
     sgl_color_t *dest = sdl2_frame_buffer;
-    int16_t w = x2 - x1 + 1;
-    int16_t h = y2 - y1 + 1;
-    dest += (x1 + y1 * CONFIG_SGL_PANEL_WIDTH);
+    int16_t w = area->x2 - area->x1 + 1;
+    int16_t h = area->y2 - area->y1 + 1;
+    dest += (area->x1 + area->y1 * CONFIG_SGL_PANEL_WIDTH);
 
     for(int i = 0; i < h; i ++) {
         memcpy(dest, src, w * sizeof(sgl_color_t));
@@ -161,7 +162,7 @@ static bool panel_flush_area(int16_t x1, int16_t y1, int16_t x2, int16_t y2, sgl
     }
 
     flush_window(m_renderer);
-    return true;
+    sgl_fbdev_flush_ready();
 }
 
 
@@ -180,19 +181,17 @@ sgl_port_sdl2_t* sgl_port_sdl2_init(void)
 {
     sgl_port_sdl2_t *sdl2_dev = NULL;
 
-    sgl_device_fb_t fb_dev = {
+    sgl_fbinfo_t fbinfo = {
         .xres = CONFIG_SGL_PANEL_WIDTH,
         .yres = CONFIG_SGL_PANEL_HEIGHT,
-        .xres_virtual = CONFIG_SGL_PANEL_WIDTH,
-        .yres_virtual = CONFIG_SGL_PANEL_HEIGHT,
         .flush_area = panel_flush_area,
         .buffer[0] = panel_buffer0,
         .buffer[1] = panel_buffer1,
         .buffer_size = SGL_ARRAY_SIZE(panel_buffer0),
     };
 
-    sgl_device_log_register(log_stdout);
-    sgl_device_fb_register(&fb_dev);
+    sgl_logdev_register(log_stdout);
+    sgl_fbdev_register(&fbinfo);
 
     /* init sgl */
     sgl_init();
