@@ -21,14 +21,14 @@ extern const unsigned char gImage_btn[230400];
 const sgl_pixmap_t keyboard_pixmap = {
     .width = 64,
     .height = 64,
-    .bitmap = gImage_btn,
+    .bitmap.array = gImage_btn,
 };
 
 extern const unsigned char gImage_test[1536000];
 const sgl_pixmap_t test_pixmap = {
     .width = 800,
     .height = 480,
-    .bitmap = gImage_test,
+    .bitmap.array = gImage_test,
 };
 
 #define  TEST_PAGE_MAX      (10)
