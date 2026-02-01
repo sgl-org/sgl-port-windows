@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include <sgl.h>
-#include <sgl_font.h>
 
 
 typedef struct sgl_port_sdl2 sgl_port_sdl2_t;
@@ -130,6 +129,8 @@ int main(int argc, char *argv[])
     if(sdl2_dev == NULL) {
         return -1;
     }
+
+    sgl_boot_logo();
 
     sgl_page_set_pixmap(sgl_screen_act(), &test_pixmap);
 
