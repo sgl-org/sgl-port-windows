@@ -30,8 +30,8 @@
 #include <sgl.h>
 
 
-#define  CONFIG_SGL_PANEL_WIDTH         240
-#define  CONFIG_SGL_PANEL_HEIGHT        400
+#define  CONFIG_SGL_PANEL_WIDTH         800
+#define  CONFIG_SGL_PANEL_HEIGHT        480
 #define  CONFIG_SGL_PANEL_BUFFER_LINE   100
 
 
@@ -193,10 +193,7 @@ sgl_port_sdl2_t* sgl_port_sdl2_init(void)
     sgl_logdev_register(log_stdout);
     sgl_fbdev_register(&fbinfo);
 
-    /* init sgl */
-    sgl_init();
-
-    sdl2_dev = sgl_malloc(sizeof(sgl_port_sdl2_t));
+    sdl2_dev = malloc(sizeof(sgl_port_sdl2_t));
     if(sdl2_dev == NULL) {
         SGL_LOG_ERROR("SGL SDL2 device alloc initialize failed");
         return NULL;
@@ -204,19 +201,22 @@ sgl_port_sdl2_t* sgl_port_sdl2_init(void)
 
     if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
         SGL_LOG_ERROR("SGL SDL2 initialize failed");
-        sgl_free(sdl2_dev);
+        free(sdl2_dev);
         return NULL;
     }
 
     if(sdl_create_windows(&sdl2_dev->m_window, &m_renderer, "SGL SDL2 demo") < 0) {
         SGL_LOG_ERROR("SGL SDL2 create window failed");
-        sgl_free(sdl2_dev);
+        free(sdl2_dev);
         return NULL;
     }
 
     sdl2_dev->systick = SDL_AddTimer(1000, system_tick, sdl2_dev);
     sdl2_dev->anim_systick = SDL_AddTimer(1, anim_systick, sdl2_dev);
     sdl2_dev->frame_count = 0;
+
+    /* init sgl */
+    sgl_init();
 
     SDL_AddEventWatch(mouse_event_interrupt, NULL);
 

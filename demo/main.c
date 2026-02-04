@@ -130,8 +130,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    sgl_boot_logo();
-
     sgl_page_set_pixmap(sgl_screen_act(), &test_pixmap);
 
     int pos_y = 0;
