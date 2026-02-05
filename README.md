@@ -51,12 +51,16 @@ Ensure MinGW-w64 is in your PATH, then:
 ```bash
 cd demo
 make -j8
+or
+mingw32-make -j8
 ```
 
 ### Run the Demo
 
 ```bash
 make run
+or
+mingw32-make run
 ```
 
 Or directly:

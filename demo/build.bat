@@ -7,6 +7,7 @@ echo Setting up build environment...
 REM Check if 64-bit MinGW is available
 set MINGW64_PATH=C:\msys64\mingw64\bin
 set MINGW_ALT_PATH=C:\mingw64\bin
+set MAKE_CMD=make
 
 if exist "%MINGW64_PATH%\gcc.exe" (
     set "PATH=%MINGW64_PATH%;%PATH%"
@@ -25,9 +26,18 @@ if exist "%MINGW64_PATH%\gcc.exe" (
     exit /b 1
 )
 
+REM Check for mingw32-make first, then fallback to make
+if exist "%MINGW64_PATH%\mingw32-make.exe" (
+    set MAKE_CMD=mingw32-make
+    echo Using mingw32-make
+) else (
+    set MAKE_CMD=make
+    echo Using make
+)
+
 echo.
 echo Building project...
-make
+%MAKE_CMD%
 
 if %ERRORLEVEL% == 0 (
     echo.
