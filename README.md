@@ -68,17 +68,17 @@ build\sgl_simulator.exe
 
 ```
 sgl-port-windows/
-©À©¤©¤ demo/                      # Demo application
-©¦   ©À©¤©¤ main.c                # Main application entry point
-©¦   ©À©¤©¤ sgl_port_sdl2.c       # SDL2 port implementation
-©¦   ©À©¤©¤ test.c                # Test/demo code
-©¦   ©À©¤©¤ bg.c                  # Background rendering
-©¦   ©À©¤©¤ sdl/                  # SDL2 library (headers, libs, DLLs)
-©¦   ©À©¤©¤ Makefile              # Build configuration
-©¦   ©À©¤©¤ build.bat             # Windows build script
-©¦   ©¸©¤©¤ BUILD.md              # Detailed build instructions
-©¸©¤©¤ sgl/                       # SGL library (git submodule)
-    ©¸©¤©¤ source/               # SGL source code
+â”œâ”€â”€ demo/                      # Demo application
+â”‚   â”œâ”€â”€ main.c                # Main application entry point
+â”‚   â”œâ”€â”€ sgl_port_sdl2.c       # SDL2 port implementation
+â”‚   â”œâ”€â”€ test.c                # Test/demo code
+â”‚   â”œâ”€â”€ bg.c                  # Background rendering
+â”‚   â”œâ”€â”€ sdl/                  # SDL2 library (headers, libs, DLLs)
+â”‚   â”œâ”€â”€ Makefile              # Build configuration
+â”‚   â”œâ”€â”€ build.bat             # Windows build script
+â”‚   â””â”€â”€ BUILD.md              # Detailed build instructions
+â””â”€â”€ sgl/                       # SGL library (git submodule)
+    â””â”€â”€ source/               # SGL source code
 ```
 
 ## Features
