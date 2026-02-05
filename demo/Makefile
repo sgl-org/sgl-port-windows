@@ -1,15 +1,17 @@
 TARGET    := sgl_simulator
 BUILD_DIR := build
 
-ENV_TYPE := $(shell echo $$0)
-ifeq ($(ENV_TYPE),/usr/bin/sh)
-    CONFIG = cp sgl_config.h ../sgl/source/sgl_config.h
-    SDL_COPY = cp  sdl/bin/SDL2.dll $(BUILD_DIR)/SDL2.dll
-    CLEAN = rm -rf $(BUILD_DIR)
+# Detect OS
+ifeq ($(OS),Windows_NT)
+    CONFIG = cmd /c copy /Y sgl_config.h ..\sgl\source\sgl_config.h
+    SDL_COPY = cmd /c copy /Y sdl\bin\SDL2.dll $(BUILD_DIR)\SDL2.dll
+    CLEAN = cmd /c if exist $(BUILD_DIR) rmdir /S /Q $(BUILD_DIR)
+    MKDIR = cmd /c if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
 else
-    CONFIG = copy /Y sgl_config.h ..\sgl\source\sgl_config.h
-    SDL_COPY = copy /Y sdl\bin\SDL2.dll $(BUILD_DIR)\SDL2.dll
-    CLEAN = rmdir /S /Q $(BUILD_DIR)
+    CONFIG = cp sgl_config.h ../sgl/source/sgl_config.h
+    SDL_COPY = cp sdl/bin/SDL2.dll $(BUILD_DIR)/SDL2.dll
+    CLEAN = rm -rf $(BUILD_DIR)
+    MKDIR = mkdir -p $(BUILD_DIR)
 endif
 
 
@@ -27,8 +29,8 @@ CPATH     := -Isdl/include/SDL2      \
 			 -I../sgl/source         \
 			 -I../sgl/source/include
 
-CFLAGS    := $(CPATH) -O2 -Wl,-Bstatic -ffunction-sections -fdata-sections -nostdlib -ffreestanding -Wunused-function -Wall -Wextra -std=c99  -g
-LDFLAGS   := -lmingw32 -lSDL2main -lSDL2.dll -Lsdl/lib -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
+CFLAGS    := $(CPATH) -O2 -ffunction-sections -fdata-sections -Wunused-function -Wall -Wextra -std=c99 -g
+LDFLAGS   := -Lsdl/lib -lmingw32 -lSDL2main -lSDL2 -mwindows -lm -ldinput8 -ldxguid -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lsetupapi -lversion -luuid -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
 
 
 SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
@@ -95,10 +97,8 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/$(TARGET).exe: $(OBJECTS) Makefile
 	@echo "LD   $@"
 	@$(CC) $(OBJECTS) $(LDFLAGS) -o $@
-	@$(OD) $(BUILD_DIR)/$(TARGET).exe -xS > $(BUILD_DIR)/$(TARGET).s $@
-	@echo ''
+	@$(OD) $(BUILD_DIR)/$(TARGET).exe -xS > $(BUILD_DIR)/$(TARGET).s
 	@echo "Build Successful!"
-	@echo "ELF   $@"
 
 
 elf_info: $(BUILD_DIR)/$(TARGET).exe
@@ -108,7 +108,7 @@ elf_info: $(BUILD_DIR)/$(TARGET).exe
 
 
 $(BUILD_DIR):
-	@mkdir $@
+	@$(MKDIR)
 
 
 # Pseudo command
