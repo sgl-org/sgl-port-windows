@@ -39,7 +39,7 @@ git submodule update --remote
 
 ### Option 1: Using the build script (easiest)
 1. Enter demo directory
-2. run build.bat script
+2. run build.bat script    
 The script automatically detects and sets up the correct MinGW-w64 toolchain, and run the exe app
 
 ### Option 2: Using make directly
