@@ -6,6 +6,47 @@ A Windows SDL2-based port and demo for the Simple Graphics Library (SGL).
 
 This repository provides a Windows implementation of SGL using SDL2 as the graphics backend. It includes a complete demo application showcasing various SGL features including widgets, graphics primitives, and user interface elements.
 
+# Quick Start
+
+## Clone the Repository
+   ```bash
+   git clone https://github.com/sgl-org/sgl-port-windows.git
+   cd sgl-port-windows
+   git submodule init
+   git submodule update --remote
+   ```
+
+## Build the Demo
+
+### Option 1: Using the build script (easiest)
+   ```
+   1. Enter demo directory
+   2. run build.bat script
+   The script automatically detects and sets up the correct MinGW-w64 toolchain, and run the exe app
+   ```
+### Option 2: Using make directly
+#### Build the demo
+   ```
+   # Ensure MinGW-w64 is in your PATH, then:
+   cd demo
+   make -j8
+   or
+   mingw32-make -j8
+   ```
+
+#### Run the Demo
+
+   ```bash
+   make run
+   or
+   mingw32-make run
+   ```
+   
+   Or directly:
+   ```cmd
+   build\sgl_simulator.exe
+   ```
+
 ## Prerequisites
 
 This project requires **64-bit MinGW-w64** (not 32-bit MinGW) because the included SDL2 libraries are compiled for 64-bit Windows.
@@ -23,50 +64,6 @@ This project requires **64-bit MinGW-w64** (not 32-bit MinGW) because the includ
    pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make
    ```
 5. Add `C:\msys64\mingw64\bin` to your system PATH environment variable
-
-## Quick Start
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/sgl-org/sgl-port-windows.git
-cd sgl-port-windows
-git submodule init
-git submodule update --remote
-```
-
-### Build the Demo
-
-**Option 1: Using the build script (easiest)**
-```cmd
-cd demo
-build.bat
-```
-
-The script automatically detects and sets up the correct MinGW-w64 toolchain.
-
-**Option 2: Using make directly**
-
-Ensure MinGW-w64 is in your PATH, then:
-```bash
-cd demo
-make -j8
-or
-mingw32-make -j8
-```
-
-### Run the Demo
-
-```bash
-make run
-or
-mingw32-make run
-```
-
-Or directly:
-```cmd
-build\sgl_simulator.exe
-```
 
 ## Project Structure
 
