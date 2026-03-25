@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
             break;
         }
 
-        sgl_task_handle();
+        sgl_task_handler();
 
         sgl_port_sdl2_increase_frame_count(sdl2_dev);
     }

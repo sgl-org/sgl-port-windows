@@ -1,6 +1,7 @@
 @echo off
 REM Build script for SGL Simulator on Windows
 REM This script sets up the correct toolchain path and builds the project
+REM Modified to run the executable automatically after successful build
 
 echo Setting up build environment...
 
@@ -42,7 +43,13 @@ echo Building project...
 if %ERRORLEVEL% == 0 (
     echo.
     echo Build successful! The executable is in build\sgl_simulator.exe
-    echo To run it, execute: build\sgl_simulator.exe
+    echo Running the simulator now...
+    echo.
+    REM 运行编译后的可执行文件
+    build\sgl_simulator.exe
+    
+    REM 如果程序运行后需要暂停查看输出，取消下面这行的注释
+    REM pause
 ) else (
     echo.
     echo Build failed! Check the error messages above.
