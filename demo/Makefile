@@ -71,6 +71,8 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
 			../sgl/source/fonts/sgl_ascii_song23.c         \
 			../sgl/source/fonts/sgl_ascii_consolas23.c     \
 			../sgl/source/fonts/sgl_ascii_consolas24.c     \
+			../sgl/source/fonts/sgl_ascii_consolas32.c   \
+			../sgl/source/fonts/sgl_ascii_consolas24_compress.c   \
 			../sgl/source/fonts/sgl_ascii_consolas14.c     
 
 
