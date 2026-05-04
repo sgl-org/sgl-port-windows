@@ -78,7 +78,6 @@ void test_click_cb(sgl_event_t *event)
     }
     else if (event->type == SGL_EVENT_RELEASED) {
         int diff = sgl_obj_get_pos_y(test_page[0]) % SGL_SCREEN_HEIGHT;
-        SGL_LOG_INFO("Clicked %d", diff);
         for (int i = 0; i < TEST_PAGE_MAX; i++) {
             sgl_obj_size_zoom(test_page[i], 10);
         }
@@ -100,9 +99,9 @@ void test_click_cb(sgl_event_t *event)
         }
     }
 
-    int diff = sgl_obj_get_pos_y(test_page[0]) % SGL_SCREEN_HEIGHT;
-    SGL_LOG_INFO("Clicked %d", diff);
+    SGL_LOG_INFO("Clicked %d", event->type);
     if (event->type == SGL_EVENT_MOVE_UP) {
+        SGL_LOG_INFO("Move up %d", event->distance);
         down_up = false;
         for (int i = 0; i < TEST_PAGE_MAX; i++) {
             sgl_obj_set_pos_y(test_page[i], sgl_obj_get_pos_y(test_page[i]) + -event->distance);
@@ -143,6 +142,7 @@ int main(int argc, char *argv[])
         sgl_rect_set_color(test_page[i], sgl_rgb(sgl_rand() % 255, sgl_rand() % 255, sgl_rand() % 255));
         sgl_rect_set_alpha(test_page[i], 200);
         sgl_obj_set_clickable(test_page[i]);
+        sgl_obj_set_movable(test_page[i]);
         sgl_obj_set_event_cb(test_page[i], test_click_cb, 0);
 
         sgl_obj_t *label = sgl_label_create(test_page[i]);

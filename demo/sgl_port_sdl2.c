@@ -30,9 +30,9 @@
 #include <sgl.h>
 
 
-#define  CONFIG_SGL_PANEL_WIDTH         800
-#define  CONFIG_SGL_PANEL_HEIGHT        480
-#define  CONFIG_SGL_PANEL_BUFFER_LINE   100
+#define  CONFIG_SGL_PANEL_WIDTH         480
+#define  CONFIG_SGL_PANEL_HEIGHT        320
+#define  CONFIG_SGL_PANEL_BUFFER_LINE   320
 
 
 static SDL_Renderer * m_renderer = NULL;
@@ -110,10 +110,10 @@ static uint32_t anim_systick(uint32_t interval, void *param)
 }
 
 
-static bool mouse_press = false;
-
 static int mouse_event_interrupt(void *userdata, SDL_Event *event) 
 {
+    static bool mouse_press = false;
+    bool pressed = false;
     SGL_UNUSED(userdata);
 
     sgl_event_pos_t pos;
@@ -121,23 +121,24 @@ static int mouse_event_interrupt(void *userdata, SDL_Event *event)
     {
     case SDL_MOUSEBUTTONDOWN:
         mouse_press = true;
-        pos.x = event->motion.x;
-        pos.y = event->motion.y;
-        sgl_event_send_pos(pos, SGL_EVENT_PRESSED);
+        pos.x = event->button.x;
+        pos.y = event->button.y;
+        pressed = true;
+        sgl_event_pos_input(pos.x, pos.y, pressed);
         break;
 
     case SDL_MOUSEBUTTONUP:
-        pos.x = event->motion.x;
-        pos.y = event->motion.y;
+        pos.x = event->button.x;
+        pos.y = event->button.y;
         mouse_press = false;
-        sgl_event_send_pos(pos, SGL_EVENT_RELEASED);
+        sgl_event_pos_input(pos.x, pos.y, pressed);
         break;
 
     case SDL_MOUSEMOTION:
         if(mouse_press) {
             pos.x = event->motion.x;
             pos.y = event->motion.y;
-            sgl_event_send_pos(pos, SGL_EVENT_MOTION);
+            sgl_event_pos_input(pos.x, pos.y, true);
         }
         break;
 

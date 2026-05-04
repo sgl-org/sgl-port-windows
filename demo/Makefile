@@ -27,13 +27,14 @@ BIN = $(CP) -O binary -S
 
 CPATH     := -Isdl/include/SDL2      \
 			 -I../sgl/source         \
-			 -I../sgl/source/include
+			 -I../sgl/source/include \
+			 -I../sgl/source/components 
 
 CFLAGS    := $(CPATH) -O2 -ffunction-sections -fdata-sections -Wunused-function -Wall -Wextra -std=c99 -g
 LDFLAGS   := -Lsdl/lib -lmingw32 -lSDL2main -lSDL2 -mconsole -lm -ldinput8 -ldxguid -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lsetupapi -lversion -luuid -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
 
 
-SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
+SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  font_test.c \
 			../sgl/source/core/sgl_core.c    \
 			../sgl/source/core/sgl_log.c     \
 			../sgl/source/core/sgl_math.c    \
@@ -41,8 +42,8 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
 			../sgl/source/core/sgl_misc.c   \
 			../sgl/source/core/sgl_anim.c    \
 			../sgl/source/core/sgl_snprintf.c \
-			../sgl/source/mm/lwmem/lwmem.c   \
-			../sgl/source/mm/lwmem/sgl_mm.c  \
+			../sgl/source/mm/tlsf/tlsf.c   \
+			../sgl/source/mm/tlsf/sgl_mm.c  \
 			../sgl/source/draw/sgl_draw_line.c  \
 			../sgl/source/draw/sgl_draw_rect.c  \
 			../sgl/source/draw/sgl_draw_circle.c  \
@@ -50,6 +51,7 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
 			../sgl/source/draw/sgl_draw_text.c \
 			../sgl/source/draw/sgl_draw_ring.c  \
 			../sgl/source/draw/sgl_draw_icon.c  \
+			../sgl/source/draw/sgl_draw_xform.c  \
 			../sgl/source/widgets/line/sgl_line.c  \
 			../sgl/source/widgets/rectangle/sgl_rectangle.c  \
 			../sgl/source/widgets/circle/sgl_circle.c  \
@@ -62,18 +64,27 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c \
 			../sgl/source/widgets/msgbox/sgl_msgbox.c   \
 			../sgl/source/widgets/textline/sgl_textline.c  \
 			../sgl/source/widgets/textbox/sgl_textbox.c    \
+			../sgl/source/widgets/dropdown/sgl_dropdown.c    \
 			../sgl/source/widgets/checkbox/sgl_checkbox.c   \
 			../sgl/source/widgets/icon/sgl_icon.c     \
 			../sgl/source/widgets/numberkbd/sgl_numberkbd.c  \
 			../sgl/source/widgets/keyboard/sgl_keyboard.c   \
 			../sgl/source/widgets/2dball/sgl_2dball.c      \
+			../sgl/source/widgets/ext_img/sgl_ext_img.c      \
 			../sgl/source/widgets/led/sgl_led.c      \
+			../sgl/source/widgets/win/sgl_win.c      \
+			../sgl/source/widgets/box/sgl_box.c      \
+			../sgl/source/widgets/progress/sgl_progress.c      \
+			../sgl/source/widgets/scope/sgl_scope.c     \
+			../sgl/source/widgets/bar/sgl_bar.c      \
+			../sgl/source/widgets/textlist/sgl_textlist.c      \
+			../sgl/source/widgets/viewlist/sgl_viewlist.c      \
 			../sgl/source/fonts/sgl_ascii_song23.c         \
 			../sgl/source/fonts/sgl_ascii_consolas23.c     \
 			../sgl/source/fonts/sgl_ascii_consolas24.c     \
-			../sgl/source/fonts/sgl_ascii_consolas32.c   \
-			../sgl/source/fonts/sgl_ascii_consolas24_compress.c   \
-			../sgl/source/fonts/sgl_ascii_consolas14.c     
+			../sgl/source/fonts/sgl_ascii_consolas14.c   \
+			../sgl/source/fonts/sgl_ascii_consolas32.c     \
+			../sgl/source/components/timer/sgl_timer.c     
 
 
 .PHONY: config all
