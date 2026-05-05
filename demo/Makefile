@@ -30,11 +30,11 @@ CPATH     := -Isdl/include/SDL2      \
 			 -I../sgl/source/include \
 			 -I../sgl/source/components 
 
-CFLAGS    := $(CPATH) -O2 -ffunction-sections -fdata-sections -Wunused-function -Wall -Wextra -std=c99 -g
+CFLAGS    := $(CPATH) -O2 -ffunction-sections -fdata-sections -Wunused-function -Wall -Wextra -std=c99 -g -Wno-incompatible-pointer-types
 LDFLAGS   := -Lsdl/lib -lmingw32 -lSDL2main -lSDL2 -mconsole -lm -ldinput8 -ldxguid -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lsetupapi -lversion -luuid -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
 
 
-SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  font_test.c \
+SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c   \
 			../sgl/source/core/sgl_core.c    \
 			../sgl/source/core/sgl_log.c     \
 			../sgl/source/core/sgl_math.c    \
@@ -84,7 +84,10 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  font_test.c \
 			../sgl/source/fonts/sgl_ascii_consolas24.c     \
 			../sgl/source/fonts/sgl_ascii_consolas14.c   \
 			../sgl/source/fonts/sgl_ascii_consolas32.c     \
-			../sgl/source/components/timer/sgl_timer.c     
+			../sgl/source/components/timer/sgl_timer.c     \
+			../sgl/source/components/qrcode/sgl_qrcode.c     \
+			../sgl/source/components/qrcode/qrcodegen.c     \
+
 
 
 .PHONY: config all
