@@ -1,18 +1,22 @@
 TARGET    := sgl_simulator
 BUILD_DIR := build
 
-# Detect OS
+# Detect OS and CPU cores
 ifeq ($(OS),Windows_NT)
     CONFIG = cmd /c copy /Y sgl_config.h ..\sgl\source\sgl_config.h
     SDL_COPY = cmd /c copy /Y sdl\bin\SDL2.dll $(BUILD_DIR)\SDL2.dll
     CLEAN = cmd /c if exist $(BUILD_DIR) rmdir /S /Q $(BUILD_DIR)
     MKDIR = cmd /c if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
+    NPROCS := $(NUMBER_OF_PROCESSORS)
 else
     CONFIG = cp sgl_config.h ../sgl/source/sgl_config.h
     SDL_COPY = cp sdl/bin/SDL2.dll $(BUILD_DIR)/SDL2.dll
     CLEAN = rm -rf $(BUILD_DIR)
     MKDIR = mkdir -p $(BUILD_DIR)
+    NPROCS := $(shell nproc 2>/dev/null || sysctl -n hw.logicalcpu 2>/dev/null || echo 1)
 endif
+
+MAKEFLAGS += -j$(NPROCS)
 
 
 # toolchain
