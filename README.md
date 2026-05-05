@@ -8,6 +8,8 @@ This repository provides a Windows implementation of SGL using SDL2 as the graph
 
 # Quick Start
 
+> **Tip for VS Code users:** Once the environment is set up, you can build the demo instantly with **Ctrl+Shift+B** (default build task).
+
 ## Clone the Repository
    ```bash
    git clone https://github.com/sgl-org/sgl-port-windows.git
