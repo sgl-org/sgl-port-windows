@@ -133,19 +133,6 @@ int main(int argc, char *argv[])
 
     int pos_y = 0;
 
-
-
-    /* qrcode example */
-    const char* qr_url = "https://github.com/sgl-org/sgl";
-    sgl_qrcode_t *qr = sgl_qrcode_create(NULL,qr_url);  
-    sgl_obj_set_pos(qr,SGL_SCREEN_WIDTH/2 - qr->width*2/3 , 0); 
-    sgl_qrcode_set_qr_quiet_zone(qr, 2);    
-    sgl_qrcode_set_qr_version(qr, 5, qr_url);
-    sgl_qrcode_set_qr_scale(qr, 3); 
-    sgl_qrcode_set_size(qr, qr->width+30, qr->height+50); 
-    sgl_qrcode_set_alpha(qr, SGL_ALPHA_PRCNT(80)); 
-
-
     for (int i = 0; i < TEST_PAGE_MAX; i++) {
         test_page[i] = sgl_rect_create(NULL);
         sgl_obj_set_pos(test_page[i], 0, pos_y);
