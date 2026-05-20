@@ -32,14 +32,13 @@
 
 #define  CONFIG_SGL_PANEL_WIDTH         480
 #define  CONFIG_SGL_PANEL_HEIGHT        320
-#define  CONFIG_SGL_PANEL_BUFFER_LINE   320
+#define  CONFIG_SGL_PANEL_BUFFER_LINE   100
 
 
 static SDL_Renderer * m_renderer = NULL;
 
 typedef struct sgl_port_sdl2 {
     SDL_Window    *m_window;
-    SDL_TimerID   systick;
     SDL_TimerID   anim_systick;
     uint32_t      frame_count;
 } sgl_port_sdl2_t;
@@ -55,11 +54,6 @@ typedef struct sgl_port_sdl2 {
 #define  SDL_PIXEL_FORMAT       SDL_PIXELFORMAT_RGB332
 #endif
 
-
-
-sgl_color_t sdl2_frame_buffer[CONFIG_SGL_PANEL_WIDTH * CONFIG_SGL_PANEL_HEIGHT] = {0};
-
-
 static int sdl_create_windows(SDL_Window **m_window, SDL_Renderer **m_renderer, const char *title)
 {
     if ( SDL_CreateWindowAndRenderer( CONFIG_SGL_PANEL_WIDTH, CONFIG_SGL_PANEL_HEIGHT, SDL_WINDOW_SHOWN,
@@ -67,40 +61,8 @@ static int sdl_create_windows(SDL_Window **m_window, SDL_Renderer **m_renderer, 
         return -1;
     }
 
-    SDL_SetWindowTitle(*m_window, title);
-
-    // Clear the window with a SGL_COLOR_WHITE background
-    for(int i = 0; i< CONFIG_SGL_PANEL_WIDTH * CONFIG_SGL_PANEL_HEIGHT; i++) {
-        sdl2_frame_buffer[i] = SGL_COLOR_WHITE;
-    }
-
-    SDL_SetRenderDrawColor( *m_renderer, 0, 0, 0, 255);
-    SDL_RenderClear( *m_renderer );
     return 0;
 }
-
-
-static void flush_window(SDL_Renderer * m_renderer)
-{
-    SDL_Texture *texture = SDL_CreateTexture(m_renderer, SDL_PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, CONFIG_SGL_PANEL_WIDTH, CONFIG_SGL_PANEL_HEIGHT);
-    SDL_UpdateTexture(texture, NULL, sdl2_frame_buffer, CONFIG_SGL_PANEL_WIDTH * sizeof(sgl_color_t));
-    SDL_RenderCopy(m_renderer, texture, NULL, NULL);
-    SDL_RenderPresent(m_renderer);
-    SDL_DestroyTexture(texture);
-}
-
-
-static uint32_t system_tick(uint32_t interval, void *param)
-{
-    sgl_mm_monitor_t mm = sgl_mm_get_monitor();
-    sgl_port_sdl2_t *sdl2_dev = (sgl_port_sdl2_t*)param;
-    SGL_UNUSED(mm);
-    printf("SGL SDL2 Frame = %d\n", sdl2_dev->frame_count);
-    printf("Memory: total: %d used: %d, free = %d\n", mm.total_size, mm.used_size, mm.free_size);
-    sdl2_dev->frame_count = 0;
-	return interval;
-}
-
 
 static uint32_t anim_systick(uint32_t interval, void *param)
 {
@@ -151,18 +113,17 @@ static int mouse_event_interrupt(void *userdata, SDL_Event *event)
 
 static void panel_flush_area(sgl_area_t *area, sgl_color_t *src)
 {
-    sgl_color_t *dest = sdl2_frame_buffer;
     int16_t w = area->x2 - area->x1 + 1;
     int16_t h = area->y2 - area->y1 + 1;
-    dest += (area->x1 + area->y1 * CONFIG_SGL_PANEL_WIDTH);
 
-    for(int i = 0; i < h; i ++) {
-        memcpy(dest, src, w * sizeof(sgl_color_t));
-        dest += CONFIG_SGL_PANEL_WIDTH;
-        src += w;
-    }
+    const SDL_Rect screen_rect = { .x = area->x1, .y = area->y1, .w = w, .h = h };
+    SDL_Texture *texture = SDL_CreateTexture(m_renderer, SDL_PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, w, h);
 
-    flush_window(m_renderer);
+    SDL_UpdateTexture(texture, NULL, src, w * sizeof(sgl_color_t));
+    SDL_RenderCopy(m_renderer, texture, NULL, &screen_rect);
+    SDL_RenderPresent(m_renderer); 
+    SDL_DestroyTexture(texture);
+
     sgl_fbdev_flush_ready();
 }
 
@@ -211,8 +172,6 @@ sgl_port_sdl2_t* sgl_port_sdl2_init(void)
         free(sdl2_dev);
         return NULL;
     }
-
-    sdl2_dev->systick = SDL_AddTimer(1000, system_tick, sdl2_dev);
     sdl2_dev->anim_systick = SDL_AddTimer(1, anim_systick, sdl2_dev);
     sdl2_dev->frame_count = 0;
 
@@ -224,22 +183,8 @@ sgl_port_sdl2_t* sgl_port_sdl2_init(void)
     return sdl2_dev;
 }
 
-
-size_t sgl_port_sdl2_get_frame_count(sgl_port_sdl2_t* sdl2_dev)
-{
-    return sdl2_dev->frame_count;
-}
-
-
-void sgl_port_sdl2_increase_frame_count(sgl_port_sdl2_t* sdl2_dev)
-{
-    sdl2_dev->frame_count ++;
-}
-
-
 void sgl_port_sdl2_deinit(sgl_port_sdl2_t* sdl2_dev)
 {
-    SDL_RemoveTimer(sdl2_dev->systick);
     SDL_RemoveTimer(sdl2_dev->anim_systick);
     SDL_DestroyWindow(sdl2_dev->m_window);
     SDL_DestroyRenderer(m_renderer);
