@@ -1,18 +1,22 @@
 TARGET    := sgl_simulator
 BUILD_DIR := build
 
-# Detect OS
+# Detect OS and CPU cores
 ifeq ($(OS),Windows_NT)
     CONFIG = cmd /c copy /Y sgl_config.h ..\sgl\source\sgl_config.h
     SDL_COPY = cmd /c copy /Y sdl\bin\SDL2.dll $(BUILD_DIR)\SDL2.dll
     CLEAN = cmd /c if exist $(BUILD_DIR) rmdir /S /Q $(BUILD_DIR)
     MKDIR = cmd /c if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
+    NPROCS := $(NUMBER_OF_PROCESSORS)
 else
     CONFIG = cp sgl_config.h ../sgl/source/sgl_config.h
     SDL_COPY = cp sdl/bin/SDL2.dll $(BUILD_DIR)/SDL2.dll
     CLEAN = rm -rf $(BUILD_DIR)
     MKDIR = mkdir -p $(BUILD_DIR)
+    NPROCS := $(shell nproc 2>/dev/null || sysctl -n hw.logicalcpu 2>/dev/null || echo 1)
 endif
+
+MAKEFLAGS += -j$(NPROCS)
 
 
 # toolchain
@@ -30,11 +34,11 @@ CPATH     := -Isdl/include/SDL2      \
 			 -I../sgl/source/include \
 			 -I../sgl/source/components 
 
-CFLAGS    := $(CPATH) -O2 -ffunction-sections -fdata-sections -Wunused-function -Wall -Wextra -std=c99 -g
+CFLAGS    := $(CPATH) -O2 -ffunction-sections -fdata-sections -Wunused-function -Wall -Wextra -std=c99 -g -Wno-incompatible-pointer-types
 LDFLAGS   := -Lsdl/lib -lmingw32 -lSDL2main -lSDL2 -mconsole -lm -ldinput8 -ldxguid -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lsetupapi -lversion -luuid -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
 
 
-SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  font_test.c \
+SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c   \
 			../sgl/source/core/sgl_core.c    \
 			../sgl/source/core/sgl_log.c     \
 			../sgl/source/core/sgl_math.c    \
@@ -84,7 +88,10 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c  font_test.c \
 			../sgl/source/fonts/sgl_ascii_consolas24.c     \
 			../sgl/source/fonts/sgl_ascii_consolas14.c   \
 			../sgl/source/fonts/sgl_ascii_consolas32.c     \
-			../sgl/source/components/timer/sgl_timer.c     
+			../sgl/source/components/timer/sgl_timer.c     \
+			../sgl/source/components/qrcode/sgl_qrcode.c     \
+			../sgl/source/components/qrcode/qrcodegen.c     \
+
 
 
 .PHONY: config all

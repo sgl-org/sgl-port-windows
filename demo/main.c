@@ -129,9 +129,22 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    sgl_page_set_pixmap(sgl_screen_act(), &test_pixmap);
+   sgl_page_set_pixmap(sgl_screen_act(), &test_pixmap);
 
     int pos_y = 0;
+
+
+
+    /* qrcode example */
+    const char* qr_url = "https://github.com/sgl-org/sgl";
+    sgl_qrcode_t *qr = sgl_qrcode_create(NULL,qr_url);  
+    sgl_obj_set_pos(qr,SGL_SCREEN_WIDTH/2 - qr->width*2/3 , 0); 
+    sgl_qrcode_set_qr_quiet_zone(qr, 2);    
+    sgl_qrcode_set_qr_version(qr, 5, qr_url);
+    sgl_qrcode_set_qr_scale(qr, 3); 
+    sgl_qrcode_set_size(qr, qr->width+30, qr->height+50); 
+    sgl_qrcode_set_alpha(qr, SGL_ALPHA_PRCNT(80)); 
+
 
     for (int i = 0; i < TEST_PAGE_MAX; i++) {
         test_page[i] = sgl_rect_create(NULL);
@@ -140,7 +153,7 @@ int main(int argc, char *argv[])
         sgl_rect_set_radius(test_page[i], 0);
         sgl_rect_set_border_width(test_page[i], 0);
         sgl_rect_set_color(test_page[i], sgl_rgb(sgl_rand() % 255, sgl_rand() % 255, sgl_rand() % 255));
-        sgl_rect_set_alpha(test_page[i], 200);
+        sgl_rect_set_alpha(test_page[i], SGL_ALPHA_PRCNT(40));
         sgl_obj_set_clickable(test_page[i]);
         sgl_obj_set_movable(test_page[i]);
         sgl_obj_set_event_cb(test_page[i], test_click_cb, 0);
@@ -151,6 +164,7 @@ int main(int argc, char *argv[])
 
         pos_y += SGL_SCREEN_HEIGHT;
     }
+
 
     while (!quit) {
         SDL_PollEvent(&MouseEvent);
