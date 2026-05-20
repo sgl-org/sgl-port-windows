@@ -88,9 +88,7 @@ SOURCE    := main.c sgl_port_sdl2.c  test.c bg.c   \
 			../sgl/source/fonts/sgl_ascii_consolas24.c     \
 			../sgl/source/fonts/sgl_ascii_consolas14.c   \
 			../sgl/source/fonts/sgl_ascii_consolas32.c     \
-			../sgl/source/components/timer/sgl_timer.c     \
-			../sgl/source/components/qrcode/sgl_qrcode.c     \
-			../sgl/source/components/qrcode/qrcodegen.c     \
+			../sgl/source/components/timer/sgl_timer.c 
 
 
 

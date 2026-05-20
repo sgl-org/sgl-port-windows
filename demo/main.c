@@ -11,10 +11,7 @@ typedef struct sgl_port_sdl2 sgl_port_sdl2_t;
 
 sgl_port_sdl2_t* sgl_port_sdl2_init(void);
 size_t sgl_port_sdl2_get_frame_count(sgl_port_sdl2_t* sdl2_dev);
-void sgl_port_sdl2_increase_frame_count(sgl_port_sdl2_t* sdl2_dev);
 void sgl_port_sdl2_deinit(sgl_port_sdl2_t* sdl2_dev);
-void flush_window_callback(void *param);
-
 
 extern const unsigned char gImage_btn[230400];
 const sgl_pixmap_t keyboard_pixmap = {
@@ -67,7 +64,6 @@ void test_scroll_page(int direction)
         sgl_obj_set_pos_y(test_page[i], (i + index) *  SGL_SCREEN_HEIGHT);
     }
 }
-
 
 void test_click_cb(sgl_event_t *event)
 {
@@ -162,8 +158,6 @@ int main(int argc, char *argv[])
         }
 
         sgl_task_handler();
-
-        sgl_port_sdl2_increase_frame_count(sdl2_dev);
     }
 
     sgl_port_sdl2_deinit(sdl2_dev);
