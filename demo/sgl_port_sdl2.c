@@ -32,7 +32,7 @@
 
 #define  CONFIG_SGL_PANEL_WIDTH         480
 #define  CONFIG_SGL_PANEL_HEIGHT        320
-#define  CONFIG_SGL_PANEL_BUFFER_LINE   100
+#define  CONFIG_SGL_PANEL_BUFFER_LINE   10
 
 
 static SDL_Renderer * m_renderer = NULL;
@@ -59,6 +59,10 @@ static int sdl_create_windows(SDL_Window **m_window, SDL_Renderer **m_renderer, 
     if ( SDL_CreateWindowAndRenderer( CONFIG_SGL_PANEL_WIDTH, CONFIG_SGL_PANEL_HEIGHT, SDL_WINDOW_SHOWN,
                                       &(*m_window), &(*m_renderer )) != 0 ) {
         return -1;
+    }
+
+    if (m_window && *m_window && title) {
+        SDL_SetWindowTitle(*m_window, title);
     }
 
     return 0;
